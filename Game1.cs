@@ -8,7 +8,9 @@ namespace Breakout
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch spriteBatch;
-        private Paddle myPaddle;
+        public Paddle myPaddle;
+        Texture2D paddleTex;
+
 
         public Game1()
         {
@@ -21,7 +23,7 @@ namespace Breakout
         {
             // TODO: Add your initialization logic here
 
-            myPaddle = new Paddle(550, 350, 50, 30);
+          
 
             base.Initialize();
         }
@@ -30,7 +32,9 @@ namespace Breakout
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            
+            paddleTex = Content.Load<Texture2D>("padle");
+
+            myPaddle = new Paddle(350, 425, 100, 20, paddleTex);
 
             // TODO: use this.Content to load your game content here
         }
@@ -40,7 +44,7 @@ namespace Breakout
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            myPaddle.Update();
+           // myPaddle.Update();
 
             // TODO: Add your update logic here
 
@@ -49,7 +53,7 @@ namespace Breakout
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
 
