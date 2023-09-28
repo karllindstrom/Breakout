@@ -9,35 +9,56 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Breakout
 {
+
+
     public class Paddle
     {
-        int x; 
-        int y; 
-        int width; 
-        int height; 
+        Vector2 position;
         Rectangle paddleRec;
-        public Texture2D paddleTex;
+        Texture2D paddleTex;
+        int speed;
+        int screenWidth;
+        int screenHeight;
 
-        public Paddle(int x, int y, int width, int height, Texture2D paddleTex)
+
+        public Paddle(int width, int height, Texture2D paddleTex, int speed, int screenWidth, int screenHeight)
         {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
             this.paddleTex = paddleTex;
-            paddleRec = new Rectangle(x, y, width,height);
+            this.speed = speed;
+            this.screenWidth = screenWidth;
 
+            // Startposition för paddeln
+            position = new Vector2(screenWidth / 2 - paddleTex.Width / 2, screenHeight - height - 40);
+
+            // Skapa rektangeln baserad på position och storlek
+            paddleRec = new Rectangle((int)position.X, (int)position.Y, width, height);
         }
 
         public void Update()
         {
+            MouseState mouseState = Mouse.GetState();
 
+            position.X = mouseState.X - paddleTex.Width / 2;
+
+            position.X = MathHelper.Clamp(position.X, 0, screenWidth - paddleTex.Width);
+
+            paddleRec.X = (int)position.X;
         }
-
+        public Rectangle Bounds
+        {
+            get { return paddleRec; }
+        }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(paddleTex, paddleRec, Color.WhiteSmoke);
+            spriteBatch.Draw(paddleTex, paddleRec, Color.RoyalBlue);
         }
-
+        
     }
 }
+
+
+
+
+
+ 
+
