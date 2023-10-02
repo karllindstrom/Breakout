@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System.Security.Principal;
 
 namespace Breakout
 {
@@ -13,8 +14,10 @@ namespace Breakout
         Texture2D paddleTex;
         Ball ball;
         Texture2D ballTex;
-        List<Brick> bricks = new List<Brick>();
+        Brick[,] bricks;
         Texture2D brickTex;
+        Texture2D backTex;
+        Rectangle backRect;
 
 
         public Game1()
@@ -40,30 +43,52 @@ namespace Breakout
 
             paddleTex = Content.Load<Texture2D>("padle");
 
-            paddle = new Paddle(140, 20, paddleTex, 10, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            backTex = Content.Load<Texture2D>("114740");
+
+            backRect = new Rectangle(0, 0, 1920, 1080);
 
             ballTex = Content.Load<Texture2D>("ball_breakout");
 
-            Vector2 ballStartPos = new Vector2(100, 100);
+            Vector2 ballStartPos = new Vector2(750, 600);
             Vector2 ballStartVelocity = new Vector2(4, 4);
+
+
+            brickTex = Content.Load<Texture2D>("block_breakout");
+            int width = _graphics.PreferredBackBufferWidth = 14 * brickTex.Width;
+            int height = _graphics.PreferredBackBufferHeight = 900;
+            _graphics.ApplyChanges();
+
+            paddle = new Paddle(140, 20, paddleTex, 10, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
             ball = new Ball(new Rectangle((int)ballStartPos.X, (int)ballStartPos.Y, ballTex.Width, ballTex.Height), ballStartVelocity, ballTex, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
-            brickTex = Content.Load<Texture2D>("block_breakout");
 
-            bricks = new List<Brick>();
-            int numberOfBricks = 10;
-            int brickWidth = 80;
-            int brickHeight = 20;
-            int brickSpacing = 10;
+            bricks = new Brick[14, 8];
 
-            for (int i = 0; i < numberOfBricks; i++)
+            for (int i = 0; i < 14; i++)
             {
-                int x = i * (brickWidth + brickSpacing);
-                Rectangle bounds = new Rectangle(x, 5, brickWidth, brickHeight);
-                Brick brick = new Brick(bounds, brickTex);
-                bricks.Add(brick);
+                for (int j = 0; j < 8; j++)
+                {
+                    int x = i * (brickTex.Width);
+                    int y = j * (brickTex.Height);
+                    Rectangle bounds = new Rectangle(x, y, brickTex.Width, brickTex.Height);
+                    bricks[i, j] = new Brick(bounds, brickTex);
+                }
             }
+
+            //bricks = new List<Brick>();
+            //int numberOfBricks = 10;
+            //int brickWidth = 80;
+            //int brickHeight = 20;
+            //int brickSpacing = 10;
+
+            //for (int i = 0; i < numberOfBricks; i++)
+            //{
+            //    int x = i * (brickWidth + brickSpacing);
+            //    Rectangle bounds = new Rectangle(x, 5, brickWidth, brickHeight);
+            //    Brick brick = new Brick(bounds, brickTex);
+            //    bricks.Add(brick);
+            //}
 
 
 
@@ -85,7 +110,7 @@ namespace Breakout
 
             foreach (var brick in bricks)
             {
-                if (ball.Bounds.Intersects(brick.Bounds))
+                if (ball.Bounds.Intersects(brick.Bounds) && brick.IsDestroyed == false)
                 {
                     brick.IsDestroyed = true;
 
@@ -93,12 +118,7 @@ namespace Breakout
                 }
             }
 
-            bricks.RemoveAll(brick => brick.IsDestroyed);
-
-
-
-
-
+            //bricks.RemoveAll(brick => brick.IsDestroyed);
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -110,18 +130,28 @@ namespace Breakout
 
             spriteBatch.Begin();
 
+            spriteBatch.Draw(backTex, backRect, Color.White);
+
             // TODO: Add your drawing code here
             ball.Draw(spriteBatch);
             
             paddle.Draw(spriteBatch);
 
+            for (int i = 0; i < bricks.GetLength(0); i++)
+            {
+                for (int j = 0; j < bricks.GetLength(1); j++)
+                {
+                    bricks[i, j].Draw(spriteBatch);
+                }
+            }
+
             foreach (var brick in bricks)
             {
                 if (!brick.IsDestroyed)
                 {
-                    spriteBatch.Draw(brick.BrickTex, brick.Bounds, Color.Red);
+                    spriteBatch.Draw(brick.BrickTex, brick.Bounds, Color.Green);
                 }
-                
+
             }
 
 

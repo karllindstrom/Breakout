@@ -50,7 +50,7 @@ namespace Breakout
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(paddleTex, paddleRec, Color.RoyalBlue);
+            spriteBatch.Draw(paddleTex, paddleRec, Color.SkyBlue);
         }
         
     }

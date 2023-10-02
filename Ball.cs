@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+
 namespace Breakout
 {
     public class Ball
@@ -26,9 +27,6 @@ namespace Breakout
             this.ballTex = ballTex;
             this.screenWidth = screenWidth;
             this.screenHeight = screenHeight;
-            
-           
-
 
         }
        
