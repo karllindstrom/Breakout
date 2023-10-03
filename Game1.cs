@@ -12,12 +12,14 @@ namespace Breakout
         private SpriteBatch spriteBatch;
         public Paddle paddle;
         Texture2D paddleTex;
-        Ball ball;
+        public Ball ball;
         Texture2D ballTex;
         Brick[,] bricks;
         Texture2D brickTex;
         Texture2D backTex;
         Rectangle backRect;
+        GameState currentGameState;
+        enum GameState {Start, Play, GameOver}
 
 
         public Game1()
@@ -72,23 +74,11 @@ namespace Breakout
                     int x = i * (brickTex.Width);
                     int y = j * (brickTex.Height);
                     Rectangle bounds = new Rectangle(x, y, brickTex.Width, brickTex.Height);
-                    bricks[i, j] = new Brick(bounds, brickTex);
+                    bricks[i, j] = new Brick(bounds, brickTex, i, j);
                 }
             }
 
-            //bricks = new List<Brick>();
-            //int numberOfBricks = 10;
-            //int brickWidth = 80;
-            //int brickHeight = 20;
-            //int brickSpacing = 10;
-
-            //for (int i = 0; i < numberOfBricks; i++)
-            //{
-            //    int x = i * (brickWidth + brickSpacing);
-            //    Rectangle bounds = new Rectangle(x, 5, brickWidth, brickHeight);
-            //    Brick brick = new Brick(bounds, brickTex);
-            //    bricks.Add(brick);
-            //}
+            currentGameState = GameState.Start;
 
 
 
@@ -103,7 +93,7 @@ namespace Breakout
 
             paddle.Update();
 
-            if (ball.Bounds.Intersects(paddle.Bounds))
+            if (ball.Bounds.Intersects(paddle.Bounds) && ball.velocity.Y > 0)
             {
                 ball.InvertYDirection();
             }
@@ -116,6 +106,20 @@ namespace Breakout
 
                     ball.InvertYDirection();
                 }
+            }
+
+            switch (currentGameState)
+            {
+                case GameState.Start:
+
+                    break;
+                case GameState.Play:
+
+                    break;
+                case GameState.GameOver:
+
+                    break;
+                   
             }
 
             //bricks.RemoveAll(brick => brick.IsDestroyed);
@@ -137,6 +141,8 @@ namespace Breakout
             
             paddle.Draw(spriteBatch);
 
+
+
             for (int i = 0; i < bricks.GetLength(0); i++)
             {
                 for (int j = 0; j < bricks.GetLength(1); j++)
@@ -149,7 +155,7 @@ namespace Breakout
             {
                 if (!brick.IsDestroyed)
                 {
-                    spriteBatch.Draw(brick.BrickTex, brick.Bounds, Color.Green);
+                    brick.Draw(spriteBatch);
                 }
 
             }

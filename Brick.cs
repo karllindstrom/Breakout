@@ -13,15 +13,31 @@ namespace Breakout
     {
         public Rectangle Bounds;
         public Texture2D BrickTex;
-
+        public Color color;
         public bool IsDestroyed; 
 
 
-        public Brick(Microsoft.Xna.Framework.Rectangle bounds, Texture2D brickTex) 
+        public Brick(Microsoft.Xna.Framework.Rectangle bounds, Texture2D brickTex, int col, int row) 
         {
             Bounds = bounds;
             BrickTex = brickTex;
             IsDestroyed = false;
+            if (row < 2)
+            {
+                color = Color.Green;
+            }
+            else if (row < 4)
+            {
+                color = Color.GreenYellow;
+            }
+            else if (row < 6)
+            {
+                color = Color.YellowGreen;
+            }
+            else
+            {
+                color = Color.Yellow;
+            }
 
         }
 
@@ -29,7 +45,7 @@ namespace Breakout
         {
             if (IsDestroyed == false)
             {
-                spriteBatch.Draw(BrickTex, Bounds, Color.Green);
+                spriteBatch.Draw(BrickTex, Bounds, color);
             }
             
         }

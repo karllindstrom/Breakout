@@ -13,7 +13,7 @@ namespace Breakout
     public class Ball
     {
         Rectangle ballRect;
-        Vector2 velocity;
+        public Vector2 velocity;
         Texture2D ballTex;
         int screenWidth;
         int screenHeight;
