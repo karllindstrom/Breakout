@@ -19,13 +19,14 @@ namespace Breakout
         int speed;
         int screenWidth;
         int screenHeight;
+        public GraphicsDevice graphicsDevice;
 
-
-        public Paddle(int width, int height, Texture2D paddleTex, int speed, int screenWidth, int screenHeight)
+        public Paddle(int width, int height, Texture2D paddleTex, int speed, int screenWidth, int screenHeight, GraphicsDevice graphicsDevice)
         {
             this.paddleTex = paddleTex;
             this.speed = speed;
             this.screenWidth = screenWidth;
+            this.graphicsDevice = graphicsDevice; 
 
             // Startposition för paddeln
             position = new Vector2(screenWidth / 2 - paddleTex.Width / 2, screenHeight - height - 40);
@@ -43,6 +44,23 @@ namespace Breakout
             position.X = MathHelper.Clamp(position.X, 0, screenWidth - paddleTex.Width);
 
             paddleRec.X = (int)position.X;
+
+            //KeyboardState keyboardState = new KeyboardState();
+
+            //float speed = 5.0f;
+
+            //if (keyboardState.IsKeyDown(Keys.Left))
+            //{
+            //    position.X -= speed;
+            //}
+            //else if (keyboardState.IsKeyDown(Keys.Right))
+            //{
+            //    position.X += speed;
+            //}
+
+            //position.X = MathHelper.Clamp(position.X, 0, screenWidth - paddleTex.Width);
+
+            //paddleRec.X = (int)position.X;
         }
         public Rectangle Bounds
         {
@@ -51,6 +69,10 @@ namespace Breakout
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(paddleTex, paddleRec, Color.SkyBlue);
+        }
+        public void Reset()
+        {
+            position.X = (screenWidth - paddleTex.Width / 2);
         }
         
     }
